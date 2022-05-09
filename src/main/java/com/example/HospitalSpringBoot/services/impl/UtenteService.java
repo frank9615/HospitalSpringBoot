@@ -35,4 +35,11 @@ public class UtenteService implements IUtenteService {
     public void delete(Utente utente) {
         this.utenteRepository.delete(utente);
     }
+
+    @Override
+    public Utente getByUsername(String username) {
+        return this.utenteRepository.findByUsername(username);
+    }
+
+
 }

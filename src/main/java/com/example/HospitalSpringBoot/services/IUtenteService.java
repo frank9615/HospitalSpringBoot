@@ -11,4 +11,5 @@ public interface IUtenteService {
     public Optional<Utente> getById(Long id);
     public void save(Utente utente);
     public void delete(Utente utente);
+    public Utente getByUsername(String username);
 }

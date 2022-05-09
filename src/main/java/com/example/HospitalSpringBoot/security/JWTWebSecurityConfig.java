@@ -33,21 +33,18 @@ public class JWTWebSecurityConfig extends WebSecurityConfigurerAdapter {
 	private String authenticationPath;
 
 	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception
-	{
+	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoderBean());
 	}
 
 	@Bean
-	public static PasswordEncoder passwordEncoderBean()
-	{
+	public static PasswordEncoder passwordEncoderBean() {
 		return new BCryptPasswordEncoder();
 	}
 
 	@Bean
 	@Override
-	public AuthenticationManager authenticationManagerBean() throws Exception
-	{
+	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
 

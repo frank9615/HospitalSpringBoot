@@ -18,5 +18,4 @@ public class Utente {
     private String password;
     private Role role;
 
-
 }

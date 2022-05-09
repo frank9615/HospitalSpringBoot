@@ -48,7 +48,7 @@ public class JwtAuthenticationRestController {
         return ResponseEntity.ok(new JwtTokenResponse(token));
     }
 
-    @GetMapping(value = "${sicurezza.refresh}")
+    @GetMapping(value = "${jwt.refresh}")
     @SneakyThrows
     public ResponseEntity<JwtTokenResponse> refreshAndGetAuthenticationToken(HttpServletRequest request)
     {
