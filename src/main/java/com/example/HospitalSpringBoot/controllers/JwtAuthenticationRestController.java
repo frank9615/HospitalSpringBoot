@@ -77,27 +77,22 @@ public class JwtAuthenticationRestController {
     }
 
     @ExceptionHandler({ AuthenticationException.class })
-    public ResponseEntity<String> handleAuthenticationException(AuthenticationException e)
-    {
+    public ResponseEntity<String> handleAuthenticationException(AuthenticationException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
 
-    private void authenticate(String username, String password)
-    {
+    private void authenticate(String username, String password) {
         Objects.requireNonNull(username);
         Objects.requireNonNull(password);
 
-        try
-        {
+        try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         }
-        catch (DisabledException e)
-        {
+        catch (DisabledException e) {
             log.warning("UTENTE DISABILITATO");
             throw new AuthenticationException("UTENTE DISABILITATO", e);
         }
-        catch (BadCredentialsException e)
-        {
+        catch (BadCredentialsException e) {
             log.warning("CREDENZIALI NON VALIDE");
             throw new AuthenticationException("CREDENZIALI NON VALIDE", e);
         }

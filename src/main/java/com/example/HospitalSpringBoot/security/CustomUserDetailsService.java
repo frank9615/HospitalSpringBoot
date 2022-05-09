@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 
 
 import com.example.HospitalSpringBoot.entities.Utente;
+import com.example.HospitalSpringBoot.services.IUtenteService;
 import com.example.HospitalSpringBoot.services.impl.UtenteService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ import lombok.extern.java.Log;
 public class CustomUserDetailsService implements UserDetailsService {
 
 	@Autowired
-	private UtenteService utenteService;
+	private IUtenteService utenteService;
 	
 	@Override
 	@SneakyThrows
@@ -44,7 +45,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		
 		UserBuilder builder = null;
 		builder = org.springframework.security.core.userdetails.User.withUsername(utente.getUsername());
-		builder.password(utente.getPassword());
+		builder.password("{noop}" + utente.getPassword());
 		builder.authorities("ROLE_" + utente.getRole());
 		return builder.build();
 	}
