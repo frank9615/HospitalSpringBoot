@@ -2,7 +2,7 @@ package com.example.HospitalSpringBoot.security;
 
 
 import com.example.HospitalSpringBoot.entities.User;
-import com.example.HospitalSpringBoot.services.IUtenteService;
+import com.example.HospitalSpringBoot.enums.services.IUserService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User.UserBuilder;
@@ -18,7 +18,7 @@ import lombok.extern.java.Log;
 public class CustomUserDetailsService implements UserDetailsService {
 
 	@Autowired
-	private IUtenteService utenteService;
+	private IUserService utenteService;
 	
 	@Override
 	@SneakyThrows
