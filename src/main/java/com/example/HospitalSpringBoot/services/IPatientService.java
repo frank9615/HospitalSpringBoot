@@ -1,5 +1,6 @@
 package com.example.HospitalSpringBoot.services;
 
+import com.example.HospitalSpringBoot.dtos.PatientDto;
 import com.example.HospitalSpringBoot.entities.Patient;
 
 import java.util.List;
@@ -11,5 +12,5 @@ public interface IPatientService {
     void save(Patient patient);
     void update(Patient patient);
     void delete(Patient patient);
-    List<Patient> getAll();
+    List<PatientDto> getAll();
 }

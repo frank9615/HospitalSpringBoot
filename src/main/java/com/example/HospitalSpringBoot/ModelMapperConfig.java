@@ -31,7 +31,9 @@ public class ModelMapperConfig {
     PropertyMap<Patient, PatientDto> patientMapping = new PropertyMap<Patient, PatientDto>() {
         @Override
         protected void configure() {
-            map().setRegistrationdate(source.getRegistrationdate());
+            // Sistemare il mapping guardando questo tutorial
+            // -> https://www.baeldung.com/java-modelmapper
+            //map().setRegistrationdate(source.getRegistrationdate());
         }
     };
 
