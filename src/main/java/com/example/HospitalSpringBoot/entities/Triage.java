@@ -3,6 +3,7 @@ package com.example.HospitalSpringBoot.entities;
 
 import com.example.HospitalSpringBoot.enums.TriageColor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -11,17 +12,18 @@ import java.util.Date;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class Triage implements Serializable {
     @Id
     @GeneratedValue(generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
     @Enumerated(EnumType.STRING)
-    private TriageColor triageColor;
+    private TriageColor triagecolor;
     @Basic
     private String notes;
     @Temporal(TemporalType.DATE)
-    private Date triageDate;
+    private Date triagedate;
     @ManyToOne
     @JoinColumn(name = "patient_id", referencedColumnName = "id")
     private Patient patient;

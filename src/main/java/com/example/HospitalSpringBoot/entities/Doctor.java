@@ -1,6 +1,7 @@
 package com.example.HospitalSpringBoot.entities;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import java.util.Set;
 
 @Entity
 @DiscriminatorValue("DOCTOR")
+@NoArgsConstructor
 @Data
 public class Doctor extends User implements Serializable {
     @OneToMany(mappedBy = "doctor")

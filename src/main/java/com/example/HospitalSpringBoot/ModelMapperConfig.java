@@ -1,6 +1,8 @@
 package com.example.HospitalSpringBoot;
 
+import com.example.HospitalSpringBoot.dtos.PatientDto;
 import com.example.HospitalSpringBoot.dtos.TriageDto;
+import com.example.HospitalSpringBoot.entities.Patient;
 import com.example.HospitalSpringBoot.entities.Triage;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
@@ -15,6 +17,7 @@ public class ModelMapperConfig {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setSkipNullEnabled(true);
         modelMapper.addMappings(triageMapping);
+        modelMapper.addMappings(patientMapping);
         return modelMapper;
     }
 
@@ -24,4 +27,13 @@ public class ModelMapperConfig {
 
         }
     };
+
+    PropertyMap<Patient, PatientDto> patientMapping = new PropertyMap<Patient, PatientDto>() {
+        @Override
+        protected void configure() {
+            map().setRegistrationdate(source.getRegistrationdate());
+        }
+    };
+
+
 }

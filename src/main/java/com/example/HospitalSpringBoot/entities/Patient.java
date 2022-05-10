@@ -1,8 +1,10 @@
 package com.example.HospitalSpringBoot.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sun.istack.NotNull;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -12,6 +14,7 @@ import java.util.Set;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class Patient implements Serializable {
     @Id
     @GeneratedValue(generator = "native")
@@ -28,7 +31,9 @@ public class Patient implements Serializable {
     @NotNull
     private Date birthday;
     @Temporal(TemporalType.DATE)
-    private Date registrationDate;
+    @NotNull
+    private Date registrationdate;
     @OneToMany(mappedBy = "patient")
+    @JsonIgnoreProperties
     private Set<Triage> triages;
 }
