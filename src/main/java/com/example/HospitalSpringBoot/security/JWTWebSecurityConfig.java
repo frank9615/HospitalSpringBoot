@@ -26,6 +26,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class JWTWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
+	private JwtUnauthorizedResponseAuthenticationEntryPoint jwtUnauthorizedResponseAuthenticationEntryPoint;
+
+	@Autowired
+	private JwtTokenAuthorizationOncePerRequestFilter jwtAuthenticationTokenFilter;
+
+	@Autowired
 	@Qualifier("customUserDetailsService")
 	private UserDetailsService userDetailsService;
 
@@ -44,12 +50,24 @@ public class JWTWebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return super.authenticationManagerBean();
 	}
 
+	private static final String[] ADMIN_MATCHER = { "/api/utenti/inserisci/**",
+			"/api/utenti/modifica/**", "/api/utenti/elimina/**" };
+
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.csrf().disable()
+				.exceptionHandling().authenticationEntryPoint(jwtUnauthorizedResponseAuthenticationEntryPoint)
+				.and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
-				.authorizeRequests().anyRequest().authenticated();
+				.authorizeRequests()
+				.antMatchers(ADMIN_MATCHER).hasAnyRole("ADMIN")
+				.anyRequest().authenticated();
+
+		httpSecurity.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+
+		httpSecurity.headers().frameOptions()
+				.sameOrigin().cacheControl();
 
 	}
 
