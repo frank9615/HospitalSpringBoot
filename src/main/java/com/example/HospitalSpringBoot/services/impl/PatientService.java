@@ -1,8 +1,8 @@
-package com.example.HospitalSpringBoot.enums.services.impl;
+package com.example.HospitalSpringBoot.services.impl;
 
 import com.example.HospitalSpringBoot.entities.Patient;
 import com.example.HospitalSpringBoot.repositories.PatientRepository;
-import com.example.HospitalSpringBoot.enums.services.IPatientService;
+import com.example.HospitalSpringBoot.services.IPatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

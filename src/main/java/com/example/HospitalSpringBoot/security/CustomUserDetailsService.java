@@ -2,7 +2,7 @@ package com.example.HospitalSpringBoot.security;
 
 
 import com.example.HospitalSpringBoot.entities.User;
-import com.example.HospitalSpringBoot.enums.services.IUserService;
+import com.example.HospitalSpringBoot.services.IUserService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User.UserBuilder;

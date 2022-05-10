@@ -1,7 +1,7 @@
 package com.example.HospitalSpringBoot.controllers;
 
 
-import com.example.HospitalSpringBoot.enums.services.ITriageService;
+import com.example.HospitalSpringBoot.services.ITriageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 

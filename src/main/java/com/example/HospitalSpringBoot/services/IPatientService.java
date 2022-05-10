@@ -1,4 +1,4 @@
-package com.example.HospitalSpringBoot.enums.services;
+package com.example.HospitalSpringBoot.services;
 
 import com.example.HospitalSpringBoot.entities.Patient;
 
