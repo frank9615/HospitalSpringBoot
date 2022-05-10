@@ -34,13 +34,9 @@ public class JWTWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoderBean());
+		auth.userDetailsService(userDetailsService);
 	}
 
-	@Bean
-	public static PasswordEncoder passwordEncoderBean() {
-		return new BCryptPasswordEncoder();
-	}
 
 	@Bean
 	@Override

@@ -37,8 +37,7 @@ public class JwtAuthenticationRestController {
 
     @PostMapping(value = "${jwt.uri}")
     @SneakyThrows
-    public ResponseEntity<JwtTokenResponse> createAuthenticationToken(@RequestBody JwtTokenRequest authenticationRequest)
-    {
+    public ResponseEntity<JwtTokenResponse> createAuthenticationToken(@RequestBody JwtTokenRequest authenticationRequest) {
         log.info("Autenticazione e Generazione Token");
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
         final UserDetails userDetails = userDetailsService
@@ -50,28 +49,20 @@ public class JwtAuthenticationRestController {
 
     @GetMapping(value = "${jwt.refresh}")
     @SneakyThrows
-    public ResponseEntity<JwtTokenResponse> refreshAndGetAuthenticationToken(HttpServletRequest request)
-    {
+    public ResponseEntity<JwtTokenResponse> refreshAndGetAuthenticationToken(HttpServletRequest request) {
         log.info("Tentativo Refresh Token");
         String authToken = request.getHeader(tokenHeader);
-
-        if (authToken == null)
-        {
+        if (authToken == null) {
             throw new Exception("Token assente o non valido!");
         }
-
         final String token = authToken;
 
-        if (jwtTokenUtil.canTokenBeRefreshed(token))
-        {
+        if (jwtTokenUtil.canTokenBeRefreshed(token)) {
             String refreshedToken = jwtTokenUtil.refreshToken(token);
-
             log.warning(String.format("Refreshed Token %s", refreshedToken));
-
             return ResponseEntity.ok(new JwtTokenResponse(refreshedToken));
         }
-        else
-        {
+        else {
             return ResponseEntity.badRequest().body(null);
         }
     }
@@ -84,7 +75,6 @@ public class JwtAuthenticationRestController {
     private void authenticate(String username, String password) {
         Objects.requireNonNull(username);
         Objects.requireNonNull(password);
-
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         }
