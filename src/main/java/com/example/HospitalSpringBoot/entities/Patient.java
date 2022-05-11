@@ -2,6 +2,7 @@ package com.example.HospitalSpringBoot.entities;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,6 +35,6 @@ public class Patient implements Serializable {
     @NotNull
     private Date registrationdate;
     @OneToMany(mappedBy = "patient")
-    @JsonIgnoreProperties
+    @JsonManagedReference
     private Set<Triage> triages;
 }

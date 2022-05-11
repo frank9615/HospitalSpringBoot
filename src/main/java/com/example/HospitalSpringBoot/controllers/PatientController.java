@@ -1,6 +1,7 @@
 package com.example.HospitalSpringBoot.controllers;
 
 
+import com.example.HospitalSpringBoot.dtos.PatientDto;
 import com.example.HospitalSpringBoot.entities.Patient;
 import com.example.HospitalSpringBoot.services.IPatientService;
 import lombok.SneakyThrows;
@@ -24,15 +25,15 @@ public class PatientController {
 
     @GetMapping(produces = "application/json")
     @SneakyThrows
-    public ResponseEntity<List<Patient>> getPatients(){
+    public ResponseEntity<List<PatientDto>> getPatients(){
         log.info("*** Ottengo la lista dei pazienti ***");
-        List<Patient> patients = patientService.getAll();
+        List<PatientDto> patients = patientService.getAll();
         if(patients.isEmpty()){
             String errMsg = "Non esiste nessun paziente";
             log.warning(errMsg);
             throw new Exception(errMsg);
         }
-        return new ResponseEntity<List<Patient>>(patients, HttpStatus.OK);
+        return new ResponseEntity<List<PatientDto>>(patients, HttpStatus.OK);
     }
 
 

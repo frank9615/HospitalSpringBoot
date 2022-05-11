@@ -2,6 +2,7 @@ package com.example.HospitalSpringBoot.entities;
 
 
 import com.example.HospitalSpringBoot.enums.TriageColor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
@@ -26,6 +27,7 @@ public class Triage implements Serializable {
     private Date triagedate;
     @ManyToOne
     @JoinColumn(name = "patient_id", referencedColumnName = "id")
+    @JsonBackReference
     private Patient patient;
     @ManyToOne
     @JoinColumn(name = "doctor_id", referencedColumnName = "id")
