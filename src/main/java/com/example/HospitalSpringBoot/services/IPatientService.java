@@ -7,8 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IPatientService {
-    Patient findByCF(String cf);
-    Optional<Patient> findById(Long id);
+    PatientDto findByCF(String cf);
+    PatientDto findById(Long id);
+    Patient findById2(Long id);
     void save(Patient patient);
     void update(Patient patient);
     void delete(Patient patient);

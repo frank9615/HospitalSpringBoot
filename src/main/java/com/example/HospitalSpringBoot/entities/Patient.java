@@ -1,9 +1,8 @@
 package com.example.HospitalSpringBoot.entities;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.sun.istack.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
@@ -12,6 +11,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Data
@@ -23,16 +23,18 @@ public class Patient implements Serializable {
     private Long id;
     @Basic
     @Column(unique = true)
+    @NotNull
     private String cf;
     @Basic
+    @NotNull
     private String name;
     @Basic
+    @NotNull
     private String surname;
     @Temporal(TemporalType.DATE)
     @NotNull
     private Date birthday;
     @Temporal(TemporalType.DATE)
-    @NotNull
     private Date registrationdate;
     @OneToMany(mappedBy = "patient")
     @JsonManagedReference

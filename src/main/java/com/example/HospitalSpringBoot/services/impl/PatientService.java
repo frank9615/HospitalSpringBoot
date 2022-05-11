@@ -23,13 +23,18 @@ public class PatientService implements IPatientService {
     private ModelMapper modelMapper;
 
     @Override
-    public Patient findByCF(String cf) {
-        return this.patientRepository.findByCf(cf);
+    public PatientDto findByCF(String cf) {
+        return modelMapper.map(this.patientRepository.findByCf(cf), PatientDto.class);
     }
 
     @Override
-    public Optional<Patient> findById(Long id) {
-        return this.patientRepository.findById(id);
+    public PatientDto findById(Long id) {
+        return modelMapper.map(this.patientRepository.findById(id).get(), PatientDto.class);
+    }
+
+    @Override
+    public Patient findById2(Long id) {
+        return this.patientRepository.findById(id).get();
     }
 
     @Override
