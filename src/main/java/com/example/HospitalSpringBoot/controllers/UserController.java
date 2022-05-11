@@ -37,7 +37,7 @@ public class UserController {
 
     @GetMapping(produces = "application/json")
     @SneakyThrows
-    public ResponseEntity<List<User>> getPatients(){
+    public ResponseEntity<List<User>> getUsers(){
         log.info("*** Ottengo la lista degli utenti ***");
         List<User> users = this.userService.getAll();
         if(users.isEmpty()){
@@ -64,7 +64,7 @@ public class UserController {
 
     @GetMapping(value = "/list/role/{role}" , produces = "application/json")
     @SneakyThrows
-    public ResponseEntity<List<User>> getPatients(@PathVariable("role") Role role){
+    public ResponseEntity<List<User>> getUsersbyRole(@PathVariable("role") Role role){
         log.info("*** Ottengo la lista degli utenti con ruolo "+role+ " ****");
         List<User> users = this.userService.findAllByRole(role);
         if(users.isEmpty()){
