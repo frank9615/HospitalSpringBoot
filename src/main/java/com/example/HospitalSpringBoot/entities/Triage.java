@@ -5,6 +5,7 @@ import com.example.HospitalSpringBoot.enums.TriageColor;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -28,11 +29,14 @@ public class Triage implements Serializable {
     @ManyToOne
     @JoinColumn(name = "patient_id", referencedColumnName = "id")
     @JsonBackReference
+    @ToString.Exclude
     private Patient patient;
     @ManyToOne
     @JoinColumn(name = "doctor_id", referencedColumnName = "id")
+    @ToString.Exclude
     private Doctor doctor;
     @ManyToOne
     @JoinColumn(name ="operator_id", referencedColumnName = "id")
+    @ToString.Exclude
     private Operator operator;
 }

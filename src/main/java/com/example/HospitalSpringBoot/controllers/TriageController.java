@@ -3,6 +3,7 @@ package com.example.HospitalSpringBoot.controllers;
 
 import com.example.HospitalSpringBoot.dtos.PatientDto;
 import com.example.HospitalSpringBoot.dtos.TriageDto;
+import com.example.HospitalSpringBoot.dtos.TriageUpdateDto;
 import com.example.HospitalSpringBoot.entities.*;
 import com.example.HospitalSpringBoot.services.IPatientService;
 import com.example.HospitalSpringBoot.services.ITriageService;
@@ -120,18 +121,34 @@ public class TriageController {
 
     @SneakyThrows
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    public ResponseEntity<String> updatePatient(@Valid @RequestBody TriageDto triageDto, BindingResult bindingResult){
-        log.info("******* Update Triage " + triageDto.getId());
+    public ResponseEntity<String> updatePatient(@Valid @RequestBody TriageUpdateDto triageupdateDto, BindingResult bindingResult){
+        log.info("******* Update Triage " + triageupdateDto.getId());
         if(bindingResult.hasErrors()){
             String errMsg = bindingResult.getFieldError().toString();
             log.warning(errMsg);
             throw new Exception(errMsg);
         }
-        Triage triage = this.triageService.findById(triageDto.getId()).get();
+        log.info(triageupdateDto.toString());
+        Triage triage = this.triageService.findById(triageupdateDto.getId()).get();
+        log.info("**** triage caricato" + triage.toString());
         if(triage == null){
             String errMsg = String.format("Triage con id: %s non esiste", triage.getId());
             log.warning(errMsg);
             throw new Exception(errMsg);
+        }
+        // In triage we can change doctor but not patient or operator
+        if(triageupdateDto.getDoctor_id() != null) {
+            if (triage.getDoctor().getId() != triageupdateDto.getDoctor_id()) {
+                Doctor doctor = (Doctor) this.userService.getById(triageupdateDto.getDoctor_id());
+                triage.setDoctor(doctor);
+            }
+        }
+        //change other param
+        if(triageupdateDto.getTriageColor() != null){
+            triage.setTriagecolor(triageupdateDto.getTriageColor());
+        }
+        if(triageupdateDto.getNotes() != null){
+            triage.setNotes(triageupdateDto.getNotes());
         }
         this.triageService.save(triage);
         return new ResponseEntity<String>("Modifica Triage eseguito con successo", HttpStatus.CREATED);
