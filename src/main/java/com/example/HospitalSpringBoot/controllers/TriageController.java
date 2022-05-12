@@ -111,8 +111,8 @@ public class TriageController {
         }
         triagedto.setTriageDate(new Date());
         Triage triage = this.modelMapper.map(triagedto, Triage.class);
-        triage.setDoctor((Doctor)this.userService.getById(triagedto.getDoctor_id()).get());
-        triage.setOperator((Operator) this.userService.getById(triagedto.getOperator_id()).get());
+        triage.setDoctor((Doctor)this.userService.getById(triagedto.getDoctor_id()));
+        triage.setOperator((Operator) this.userService.getById(triagedto.getOperator_id()));
         triage.setPatient( this.patientService.findById2(triagedto.getPatient_id()));
         this.triageService.save(triage);
         return new ResponseEntity<String>("Insetimento Triage eseguito con successo", HttpStatus.CREATED);

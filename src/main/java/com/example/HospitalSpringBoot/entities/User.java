@@ -8,6 +8,7 @@ import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
@@ -23,21 +24,30 @@ import java.io.Serializable;
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     @GeneratedValue(generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
 
     @Column(unique = true)
+    @NotNull
+    @Basic
     private String username;
+
     @Basic
+    @NotNull
     private String password;
+
     @Basic
+    @NotNull
     private String name;
+
     @Basic
+    @NotNull
     private String surname;
 
     @Enumerated(EnumType.STRING)
+    @NotNull
     private Role role;
 
 }

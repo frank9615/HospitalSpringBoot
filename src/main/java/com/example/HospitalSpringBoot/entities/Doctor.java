@@ -17,4 +17,13 @@ public class Doctor extends User implements Serializable {
     @OneToMany(mappedBy = "doctor")
     private Set<Triage> triages;
 
+    public Doctor(User user){
+        this.setId(user.getId());
+        this.setUsername(user.getUsername());
+        this.setName(user.getName());
+        this.setPassword(user.getPassword());
+        this.setSurname(user.getSurname());
+        this.setRole(user.getRole());
+    }
+
 }
