@@ -57,6 +57,11 @@ public class TriageService implements ITriageService {
     }
 
     @Override
+    public List<Triage> getByDoctorId2(Long id) {
+        return this.triageRepository.findByDoctor_IdIs(id);
+    }
+
+    @Override
     public List<TriageDto> getByPatientId(Long id) {
         return this.toList(StreamSupport.stream(this.triageRepository.findByPatient_IdIs(id).spliterator(), false));
     }

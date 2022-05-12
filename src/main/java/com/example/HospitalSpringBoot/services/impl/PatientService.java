@@ -2,8 +2,10 @@ package com.example.HospitalSpringBoot.services.impl;
 
 import com.example.HospitalSpringBoot.dtos.PatientDto;
 import com.example.HospitalSpringBoot.entities.Patient;
+import com.example.HospitalSpringBoot.entities.Triage;
 import com.example.HospitalSpringBoot.repositories.PatientRepository;
 import com.example.HospitalSpringBoot.services.IPatientService;
+import com.example.HospitalSpringBoot.services.ITriageService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,9 @@ public class PatientService implements IPatientService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private ITriageService triageService;
 
     @Override
     public PatientDto findByCF(String cf) {
@@ -58,5 +63,11 @@ public class PatientService implements IPatientService {
                 .map(source -> modelMapper.map(source, PatientDto.class))
                 .collect(Collectors.toList());
         return patients;
+    }
+    @Override
+    public List<PatientDto> getPatientAssignedToDoctor_Id(Long id){
+        List<Triage> triagesAssignedToDoctorId = this.triageService.getByDoctorId2(id);
+        List<PatientDto> patients = triagesAssignedToDoctorId.stream().map(source -> modelMapper.map(source, PatientDto.class)).collect(Collectors.toList());
+        return patients; 
     }
 }

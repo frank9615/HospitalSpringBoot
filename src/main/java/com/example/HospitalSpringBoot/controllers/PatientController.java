@@ -128,6 +128,8 @@ public class PatientController {
         return new ResponseEntity<>(responseNode, new HttpHeaders(), HttpStatus.OK);
     }
 
+    //get list of patients from doctor_id
+
 
 
 }

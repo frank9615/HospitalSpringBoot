@@ -14,4 +14,5 @@ public interface IPatientService {
     void update(Patient patient);
     void delete(Patient patient);
     List<PatientDto> getAll();
+    List<PatientDto> getPatientAssignedToDoctor_Id(Long id);
 }
