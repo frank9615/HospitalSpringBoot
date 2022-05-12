@@ -1,6 +1,8 @@
 package com.example.HospitalSpringBoot.controllers;
 
+import com.example.HospitalSpringBoot.entities.User;
 import com.example.HospitalSpringBoot.security.JwtTokenUtil;
+import com.example.HospitalSpringBoot.services.IUserService;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,9 @@ public class JwtAuthenticationRestController {
     @Qualifier("customUserDetailsService")
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private IUserService userService;
+
     @PostMapping(value = "${jwt.uri}")
     @SneakyThrows
     public ResponseEntity<JwtTokenResponse> createAuthenticationToken(@RequestBody JwtTokenRequest authenticationRequest) {
@@ -44,7 +49,8 @@ public class JwtAuthenticationRestController {
                 .loadUserByUsername(authenticationRequest.getUsername());
         final String token = jwtTokenUtil.generateToken(userDetails);
         log.warning(String.format("Token %s", token));
-        return ResponseEntity.ok(new JwtTokenResponse(token));
+        User user  = userService.getByUsername(authenticationRequest.getUsername());
+        return ResponseEntity.ok(new JwtTokenResponse(token, user.getId(),user.getUsername(),user.getName(), user.getSurname(), user.getRole()));
     }
 
     @GetMapping(value = "${jwt.refresh}")
