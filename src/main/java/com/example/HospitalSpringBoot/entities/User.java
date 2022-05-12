@@ -1,6 +1,7 @@
 package com.example.HospitalSpringBoot.entities;
 
 import com.example.HospitalSpringBoot.enums.Role;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -11,6 +12,7 @@ import java.io.Serializable;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 @ToString
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)

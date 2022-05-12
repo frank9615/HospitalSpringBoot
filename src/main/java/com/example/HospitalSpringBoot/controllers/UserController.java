@@ -10,15 +10,25 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/users")
@@ -28,12 +38,23 @@ public class UserController {
     @Autowired
     IUserService userService;
 
-    /* Le operazioni da fare sono cercare un utente
-    * cercare un utente
-    * salvare un utente
-    * modificare un utente
-    * ottenere la lista di tutti gli utenti
-    */
+
+    @PostMapping(value = "/filter/{pagenum}/{el}", produces = "application/json")
+    @SneakyThrows
+    public  ResponseEntity<Page<User>> specification(
+            @RequestBody SearchCriteria searchCriteria,
+            @PathVariable("pagenum") String pagenum,
+            @PathVariable("el") String el) {
+        Pageable page = PageRequest.of(Integer.valueOf(pagenum), Integer.valueOf(el));
+
+        Page<User> users = userService.getAllSpecification(searchCriteria.getUsername(), searchCriteria.getName(), searchCriteria.getSurname(), page);
+        if(users.isEmpty()){
+            String errMsg = "Non esiste nessun utente con i filtri di ricerca selezionati";
+            log.warning(errMsg);
+            throw new Exception(errMsg);
+        }
+        return new ResponseEntity<Page<User>>(users, HttpStatus.OK);
+    }
 
     @GetMapping(produces = "application/json")
     @SneakyThrows

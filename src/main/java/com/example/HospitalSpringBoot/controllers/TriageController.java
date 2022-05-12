@@ -3,10 +3,11 @@ package com.example.HospitalSpringBoot.controllers;
 
 import com.example.HospitalSpringBoot.dtos.PatientDto;
 import com.example.HospitalSpringBoot.dtos.TriageDto;
-import com.example.HospitalSpringBoot.entities.Patient;
-import com.example.HospitalSpringBoot.entities.Triage;
-import com.example.HospitalSpringBoot.entities.User;
+import com.example.HospitalSpringBoot.entities.*;
+import com.example.HospitalSpringBoot.services.IPatientService;
 import com.example.HospitalSpringBoot.services.ITriageService;
+import com.example.HospitalSpringBoot.services.IUserService;
+import com.example.HospitalSpringBoot.services.impl.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.SneakyThrows;
@@ -20,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.Doc;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
@@ -31,6 +33,14 @@ public class TriageController {
 
     @Autowired
     private ITriageService triageService;
+
+    @Autowired
+    private IPatientService patientService;
+
+    @Autowired
+    private IUserService userService;
+
+
 
     @Autowired
     private ModelMapper modelMapper;
@@ -101,6 +111,9 @@ public class TriageController {
         }
         triagedto.setTriageDate(new Date());
         Triage triage = this.modelMapper.map(triagedto, Triage.class);
+        triage.setDoctor((Doctor)this.userService.getById(triagedto.getDoctor_id()).get());
+        triage.setOperator((Operator) this.userService.getById(triagedto.getOperator_id()).get());
+        triage.setPatient( this.patientService.findById2(triagedto.getPatient_id()));
         this.triageService.save(triage);
         return new ResponseEntity<String>("Insetimento Triage eseguito con successo", HttpStatus.CREATED);
     }

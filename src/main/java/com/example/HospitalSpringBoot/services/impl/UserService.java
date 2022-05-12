@@ -1,13 +1,14 @@
 package com.example.HospitalSpringBoot.services.impl;
 
-import com.example.HospitalSpringBoot.dtos.PatientDto;
-import com.example.HospitalSpringBoot.dtos.UserDto;
 import com.example.HospitalSpringBoot.entities.User;
 import com.example.HospitalSpringBoot.enums.Role;
 import com.example.HospitalSpringBoot.repositories.UserRepository;
 import com.example.HospitalSpringBoot.services.IUserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,14 +16,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import static org.springframework.data.jpa.domain.Specification.where;
+
 @Service
 
 public class UserService implements IUserService {
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private ModelMapper modelMapper;
 
     @Override
     public List<User> getAll() {
@@ -54,6 +54,25 @@ public class UserService implements IUserService {
     public List<User> findAllByRole(Role role) {
         return this.userRepository.findByRoleEquals(role);
     }
+
+    private static Specification<User> getUsersByUsernameLike(String username) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("USERNAME"), "%" + username + "%");
+    }
+
+    private static Specification<User> getUsersByNameLike(String name) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("NAME"), "%" +name + "%" );
+    }
+
+    private static Specification<User> getUsersBySurnameLike(String surname) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("SURNAME"), "%" + surname + "%" );
+    }
+
+    public Page<User> getAllSpecification(String username, String name, String surname, Pageable page) {
+        return userRepository.findAll(where(getUsersByUsernameLike(username)).and(getUsersByNameLike(name)).and(getUsersBySurnameLike(surname)), page);
+    }
+
+
+
 
 
 }

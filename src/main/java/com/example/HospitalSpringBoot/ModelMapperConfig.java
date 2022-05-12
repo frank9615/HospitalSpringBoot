@@ -14,12 +14,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ModelMapperConfig {
 
-    @Autowired
-    private IUserService userService;
-
-    @Autowired
-    private IPatientService patientService;
-
     @Bean
     public ModelMapper modelMapper(){
         ModelMapper modelMapper = new ModelMapper();
@@ -42,9 +36,7 @@ public class ModelMapperConfig {
     PropertyMap<TriageDto, Triage> triagereverseMapping = new PropertyMap<TriageDto, Triage>() {
         @Override
         protected void configure() {
-            map().setDoctor((Doctor) userService.getById(source.getDoctor_id()).get());
-            map().setOperator((Operator) userService.getById(source.getOperator_id()).get());
-            map().setPatient(patientService.findById2(source.getPatient_id()));
+
         }
     };
 
