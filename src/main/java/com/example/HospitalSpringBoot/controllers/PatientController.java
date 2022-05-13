@@ -129,6 +129,20 @@ public class PatientController {
     }
 
     //get list of patients from doctor_id
+    @SneakyThrows
+    @GetMapping(value = "/assigned/doctor/id/{id}", produces = "application/json")
+    public ResponseEntity<List<PatientDto>> getPatientsAssignedToDoctorId(@PathVariable("id") Long id){
+        log.info("*** Ottengo la lista dei pazienti assegnati al doctor id "+ id+ "***");
+        List<PatientDto> patients = patientService.getPatientAssignedToDoctor_Id(id);
+        if(patients.isEmpty()){
+            String errMsg = "Non esiste nessun paziente assegnato al dottore con l\'id indicato";
+            log.warning(errMsg);
+            throw new Exception(errMsg);
+        }
+        patients.forEach(System.out::println);
+        return new ResponseEntity<List<PatientDto>>(patients, HttpStatus.OK);
+    }
+
 
 
 

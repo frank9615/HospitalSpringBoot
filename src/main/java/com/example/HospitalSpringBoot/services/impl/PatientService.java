@@ -67,7 +67,7 @@ public class PatientService implements IPatientService {
     @Override
     public List<PatientDto> getPatientAssignedToDoctor_Id(Long id){
         List<Triage> triagesAssignedToDoctorId = this.triageService.getByDoctorId2(id);
-        List<PatientDto> patients = triagesAssignedToDoctorId.stream().map(source -> modelMapper.map(source, PatientDto.class)).collect(Collectors.toList());
+        List<PatientDto> patients = triagesAssignedToDoctorId.stream().map(source -> modelMapper.map(source.getPatient(), PatientDto.class)).collect(Collectors.toList());
         return patients; 
     }
 }
