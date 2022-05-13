@@ -49,6 +49,9 @@ public class JWTWebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 				.authorizeRequests().anyRequest().authenticated();
 
+		httpSecurity.headers().frameOptions()
+				.sameOrigin().cacheControl();
+
 	}
 
 	@Override
