@@ -1,6 +1,5 @@
 package com.example.HospitalSpringBoot.services.impl;
 
-import com.example.HospitalSpringBoot.dtos.PatientDto;
 import com.example.HospitalSpringBoot.dtos.UserDto;
 import com.example.HospitalSpringBoot.entities.User;
 import com.example.HospitalSpringBoot.enums.Role;
@@ -15,7 +14,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -27,15 +25,10 @@ public class UserService implements IUserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
     @Override
-    public List<UserDto> getAll() {
-        List<UserDto> users = StreamSupport.stream(this.userRepository.findAll().spliterator(), false)
-                .map(source -> modelMapper.map(source, UserDto.class))
+    public List<User> getAll() {
+        return StreamSupport.stream(this.userRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());
-        return users;
     }
 
     @Override
@@ -43,10 +36,6 @@ public class UserService implements IUserService {
         return this.userRepository.findById(id).get();
     }
 
-    @Override
-    public UserDto getById2(Long id) {
-        return modelMapper.map(this.userRepository.findById(id).get(), UserDto.class);
-    }
 
     @Override
     public void save(User user) {
@@ -64,43 +53,38 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<UserDto> findAllByRole(Role role) {
-        List<UserDto> users = StreamSupport.stream(this.userRepository.findByRoleEquals(role).spliterator(), false)
-                .map(source -> modelMapper.map(source, UserDto.class))
-                .collect(Collectors.toList());
-        return users;
+    public List<User> findAllByRole(Role role) {
+        return this.userRepository.findByRoleEquals(role);
+
 
     }
-
-    private static Specification<User> getUsersByUsernameLike(String username) {
+    @Override
+    public  Specification<User> getUsersByUsernameLike(String username) {
         if(username == null ){
             return null;
         }
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("username"), "%" + username + "%");
     }
 
-    private static Specification<User> getUsersByNameLike(String name) {
+    @Override
+    public  Specification<User> getUsersByNameLike(String name) {
         if(name == null ){
             return null;
         }
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("name"), "%" +name + "%" );
     }
 
-    private static Specification<User> getUsersBySurnameLike(String surname) {
+    @Override
+    public  Specification<User> getUsersBySurnameLike(String surname) {
         if(surname == null ){
             return null;
         }
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("surname"), "%" + surname + "%" );
     }
 
-    public Page<UserDto> getAllSpecification(String username, String name, String surname, Pageable page) {
+    public Page<User> getAllSpecification(String username, String name, String surname, Pageable page) {
         Page<User> users = userRepository.findAll(where(getUsersByUsernameLike(username)).and(getUsersByNameLike(name)).and(getUsersBySurnameLike(surname)), page);
-        Page<UserDto> usersdto = new PageImpl<UserDto>(users
-                .getContent()
-                .stream()
-                .map(source -> modelMapper.map(source, UserDto.class)).collect(Collectors.toList()), users.getPageable(), users.getSize());
-
-        return usersdto;
+        return users;
     }
 
 

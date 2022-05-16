@@ -7,14 +7,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ITriageService {
-    Optional<Triage> findById(Long id);
-    TriageDto findById2(Long id);
+    Triage findById(Long id);
     void save(Triage triage);
     void update(Triage triage);
     void delete(Triage triage);
-    List<TriageDto> getByDoctorId(Long id);
-    List<Triage> getByDoctorId2(Long id);
-    List<TriageDto> getByPatientId(Long id);
-    List<TriageDto> getByOperatorId(Long id);
-    List<TriageDto> getAll();
+    List<Triage> getByDoctorId(Long id);
+    List<Triage> getByPatientId(Long id);
+    List<Triage> getByOperatorId(Long id);
+    List<Triage> getAll();
+
 }

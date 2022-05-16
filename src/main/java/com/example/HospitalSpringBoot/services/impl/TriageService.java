@@ -22,18 +22,9 @@ public class TriageService implements ITriageService {
     private TriageRepository triageRepository;
 
 
-
-    @Autowired
-    private ModelMapper modelMapper;
-
     @Override
-    public Optional<Triage> findById(Long id) {
-        return this.triageRepository.findById(id);
-    }
-
-    @Override
-    public TriageDto findById2(Long id) {
-        return modelMapper.map(this.triageRepository.findById(id).get(), TriageDto.class);
+    public Triage findById(Long id) {
+        return this.triageRepository.findById(id).get(); /* gestire l'eccezione */
     }
 
     @Override
@@ -51,34 +42,26 @@ public class TriageService implements ITriageService {
         this.triageRepository.delete(triage);
     }
 
-    @Override
-    public List<TriageDto> getByDoctorId(Long id) {
-        return this.toList(StreamSupport.stream(this.triageRepository.findByDoctor_IdIs(id).spliterator(), false));
-    }
 
     @Override
-    public List<Triage> getByDoctorId2(Long id) {
+    public List<Triage> getByDoctorId(Long id) {
         return this.triageRepository.findByDoctor_IdIs(id);
     }
 
     @Override
-    public List<TriageDto> getByPatientId(Long id) {
-        return this.toList(StreamSupport.stream(this.triageRepository.findByPatient_IdIs(id).spliterator(), false));
+    public List<Triage> getByPatientId(Long id) {
+        return this.triageRepository.findByPatient_IdIs(id);
     }
 
     @Override
-    public List<TriageDto> getByOperatorId(Long id) {
-        return this.toList(StreamSupport.stream(this.triageRepository.findByOperator_IdIs(id).spliterator(), false));
+    public List<Triage> getByOperatorId(Long id) {
+        return this.triageRepository.findByOperator_IdIs(id);
     }
 
     @Override
-    public List<TriageDto> getAll() {
-        return this.toList(StreamSupport.stream(this.triageRepository.findAll().spliterator(), false));
-    }
-
-    private List<TriageDto> toList(Stream<Triage> triages){
-        return triages.map(source -> modelMapper.map(source, TriageDto.class))
+    public List<Triage> getAll() {
+        return StreamSupport.stream(this.triageRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());
-
     }
+
 }

@@ -6,6 +6,7 @@ import com.example.HospitalSpringBoot.entities.Doctor;
 import com.example.HospitalSpringBoot.entities.Operator;
 import com.example.HospitalSpringBoot.entities.User;
 import com.example.HospitalSpringBoot.enums.Role;
+import com.example.HospitalSpringBoot.servicedto.IUserDtoService;
 import com.example.HospitalSpringBoot.services.IUserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -34,6 +35,9 @@ public class UserController {
     @Autowired
     IUserService userService;
 
+    @Autowired
+    IUserDtoService userDtoService;
+
 
     @PostMapping(value = "/filter/{pagenum}/{el}", produces = "application/json")
     @SneakyThrows
@@ -43,7 +47,7 @@ public class UserController {
             @PathVariable("el") String el) {
         Pageable page = PageRequest.of(Integer.valueOf(pagenum), Integer.valueOf(el));
 
-        Page<UserDto> users = userService.getAllSpecification(searchCriteria.getUsername(), searchCriteria.getName(), searchCriteria.getSurname(), page);
+        Page<UserDto> users = userDtoService.getAllSpecification(searchCriteria.getUsername(), searchCriteria.getName(), searchCriteria.getSurname(), page);
         if(users.isEmpty()){
             String errMsg = "Non esiste nessun utente con i filtri di ricerca selezionati";
             log.warning(errMsg);
@@ -56,7 +60,7 @@ public class UserController {
     @SneakyThrows
     public ResponseEntity<List<UserDto>> getUsers(){
         log.info("*** Ottengo la lista degli utenti ***");
-        List<UserDto> users = this.userService.getAll();
+        List<UserDto> users = this.userDtoService.getAll();
         if(users.isEmpty()){
             String errMsg = "Non esiste nessun utente";
             log.warning(errMsg);
@@ -69,7 +73,7 @@ public class UserController {
     @SneakyThrows
     public ResponseEntity<UserDto> findById(@PathVariable("id") Long id){
         log.info("****** Ottengo Utente con l\'id : " + id + " *******");
-        UserDto userdto = this.userService.getById2(id);
+        UserDto userdto = this.userDtoService.getById(id);
 
         if(userdto == null){
             String errMsg = String.format("L\'utente con l\'id: %s non è stato trovato", id);
@@ -85,7 +89,7 @@ public class UserController {
         log.info("*** Ottengo la lista degli utenti con ruolo "+ role + " ****");
 
 
-        List<UserDto> users = this.userService.findAllByRole(Role.valueOf(role.toUpperCase()));
+        List<UserDto> users = this.userDtoService.findAllByRole(Role.valueOf(role.toUpperCase()));
         if(users.isEmpty()){
             String errMsg = String.format("Non esiste nessun utente con il ruo1lo %s", role);
             log.warning(errMsg);

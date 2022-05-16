@@ -22,23 +22,15 @@ public class PatientService implements IPatientService {
     private PatientRepository patientRepository;
 
     @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
     private ITriageService triageService;
 
     @Override
-    public PatientDto findByCF(String cf) {
-        return modelMapper.map(this.patientRepository.findByCf(cf), PatientDto.class);
+    public Patient findByCF(String cf) {
+        return this.patientRepository.findByCf(cf);
     }
 
     @Override
-    public PatientDto findById(Long id) {
-        return modelMapper.map(this.patientRepository.findById(id).get(), PatientDto.class);
-    }
-
-    @Override
-    public Patient findById2(Long id) {
+    public Patient findById(Long id) {
         return this.patientRepository.findById(id).get();
     }
 
@@ -58,16 +50,15 @@ public class PatientService implements IPatientService {
     }
 
     @Override
-    public List<PatientDto> getAll() {
-        List<PatientDto> patients = StreamSupport.stream(this.patientRepository.findAll().spliterator(), false)
-                .map(source -> modelMapper.map(source, PatientDto.class))
+    public List<Patient> getAll() {
+        List<Patient> patients = StreamSupport.stream(this.patientRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());
         return patients;
     }
     @Override
-    public List<PatientDto> getPatientAssignedToDoctor_Id(Long id){
-        List<Triage> triagesAssignedToDoctorId = this.triageService.getByDoctorId2(id);
-        List<PatientDto> patients = triagesAssignedToDoctorId.stream().map(source -> modelMapper.map(source.getPatient(), PatientDto.class)).collect(Collectors.toList());
-        return patients; 
+    public List<Patient> getPatientAssignedToDoctor_Id(Long id){
+        List<Triage> triagesAssignedToDoctorId = this.triageService.getByDoctorId(id);
+        List<Patient> patients = triagesAssignedToDoctorId.stream().map(source -> source.getPatient()).collect(Collectors.toList());
+        return patients;
     }
 }

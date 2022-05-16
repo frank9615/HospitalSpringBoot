@@ -3,6 +3,7 @@ package com.example.HospitalSpringBoot.controllers;
 
 import com.example.HospitalSpringBoot.dtos.PatientDto;
 import com.example.HospitalSpringBoot.entities.Patient;
+import com.example.HospitalSpringBoot.servicedto.IPatientDtoService;
 import com.example.HospitalSpringBoot.services.IPatientService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -31,13 +32,14 @@ public class PatientController {
     @Autowired
     private IPatientService patientService;
 
-
+    @Autowired
+    private IPatientDtoService patientDtoService;
 
     @GetMapping(produces = "application/json")
     @SneakyThrows
     public ResponseEntity<List<PatientDto>> getPatients(){
         log.info("*** Ottengo la lista dei pazienti ***");
-        List<PatientDto> patients = patientService.getAll();
+        List<PatientDto> patients = patientDtoService.getAll();
         if(patients.isEmpty()){
             String errMsg = "Non esiste nessun paziente";
             log.warning(errMsg);
@@ -50,7 +52,7 @@ public class PatientController {
     @SneakyThrows
     public ResponseEntity<PatientDto> findById(@PathVariable("id") Long id){
         log.info("****** Ottengo il paziente con l\'id : " + id + " *******");
-        PatientDto patient = patientService.findById(id);
+        PatientDto patient = patientDtoService.findById(id);
 
         if(patient == null){
             String errMsg = String.format("Il paziente con l\'id: %s non è stato trovato", id);
@@ -64,7 +66,7 @@ public class PatientController {
     @SneakyThrows
     public ResponseEntity<PatientDto> findById(@PathVariable("cf") String cf){
         log.info("****** Ottengo il paziente con l\'id : " + cf + " *******");
-        PatientDto patient = patientService.findByCF(cf);
+        PatientDto patient = patientDtoService.findByCF(cf);
 
         if(patient == null){
             String errMsg = String.format("Il paziente con l\'id: %s non è stato trovato", cf);
@@ -97,7 +99,7 @@ public class PatientController {
             log.warning(errMsg);
             throw new Exception(errMsg);
         }
-        PatientDto patientDto = this.patientService.findById(patient.getId());
+        PatientDto patientDto = this.patientDtoService.findById(patient.getId());
         if(patientDto == null){
             String errMsg = String.format("Paziente con id: %s non esiste", patient.getId());
             log.warning(errMsg);
@@ -111,7 +113,7 @@ public class PatientController {
     @DeleteMapping(value = "/delete/id/{id}", produces = "application/json")
     public ResponseEntity<?> deletePatient(@PathVariable("id") Long id){
         log.info("********* Delete Patient with id " + id);
-        Patient patient = patientService.findById2(id);
+        Patient patient = patientService.findById(id);
         if(patient == null){
             String errMsg = String.format("Paziente con id: %s non esiste", patient.getId());
             log.warning(errMsg);
@@ -133,7 +135,7 @@ public class PatientController {
     @GetMapping(value = "/assigned/doctor/id/{id}", produces = "application/json")
     public ResponseEntity<List<PatientDto>> getPatientsAssignedToDoctorId(@PathVariable("id") Long id){
         log.info("*** Ottengo la lista dei pazienti assegnati al doctor id "+ id+ "***");
-        List<PatientDto> patients = patientService.getPatientAssignedToDoctor_Id(id);
+        List<PatientDto> patients = patientDtoService.getPatientAssignedToDoctor_Id(id);
         if(patients.isEmpty()){
             String errMsg = "Non esiste nessun paziente assegnato al dottore con l\'id indicato";
             log.warning(errMsg);

@@ -5,6 +5,7 @@ import com.example.HospitalSpringBoot.dtos.PatientDto;
 import com.example.HospitalSpringBoot.dtos.TriageDto;
 import com.example.HospitalSpringBoot.dtos.TriageUpdateDto;
 import com.example.HospitalSpringBoot.entities.*;
+import com.example.HospitalSpringBoot.servicedto.ITriageDtoService;
 import com.example.HospitalSpringBoot.services.IPatientService;
 import com.example.HospitalSpringBoot.services.ITriageService;
 import com.example.HospitalSpringBoot.services.IUserService;
@@ -41,6 +42,8 @@ public class TriageController {
     @Autowired
     private IUserService userService;
 
+    @Autowired
+    private ITriageDtoService triageDtoService;
 
 
     @Autowired
@@ -50,7 +53,7 @@ public class TriageController {
     @SneakyThrows
     public ResponseEntity<List<TriageDto>> getTriages(){
         log.info("*** Ottengo la lista dei triage ***");
-        List<TriageDto> triages = triageService.getAll();
+        List<TriageDto> triages = triageDtoService.getAll();
         if(triages.isEmpty()){
             String errMsg = "Non esiste nessun triage";
             log.warning(errMsg);
@@ -63,7 +66,7 @@ public class TriageController {
     @SneakyThrows
     public ResponseEntity<TriageDto> findById(@PathVariable("id") Long id){
         log.info("****** Ottengo il triage con l\'id : " + id + " *******");
-        TriageDto triageDto = this.triageService.findById2(id);
+        TriageDto triageDto = this.triageDtoService.findById(id);
 
         if(triageDto == null){
             String errMsg = String.format("Il triage con l\'id: %s non è stato trovato", id);
@@ -80,13 +83,13 @@ public class TriageController {
         List<TriageDto> triageDtos;
         switch(type){
             case "doctor":
-                triageDtos = this.triageService.getByDoctorId(id);
+                triageDtos = this.triageDtoService.getByDoctorId(id);
                 break;
             case "operator":
-                triageDtos = this.triageService.getByOperatorId(id);
+                triageDtos = this.triageDtoService.getByOperatorId(id);
                 break;
             case "patient":
-                triageDtos = this.triageService.getByPatientId(id);
+                triageDtos = this.triageDtoService.getByPatientId(id);
                 break;
             default:
                 String errMsg = "Parametro type non corretto";
@@ -114,7 +117,7 @@ public class TriageController {
         Triage triage = this.modelMapper.map(triagedto, Triage.class);
         triage.setDoctor((Doctor)this.userService.getById(triagedto.getDoctor_id()));
         triage.setOperator((Operator) this.userService.getById(triagedto.getOperator_id()));
-        triage.setPatient( this.patientService.findById2(triagedto.getPatient_id()));
+        triage.setPatient( this.patientService.findById(triagedto.getPatient_id()));
         this.triageService.save(triage);
         return new ResponseEntity<String>("Insetimento Triage eseguito con successo", HttpStatus.CREATED);
     }
@@ -129,7 +132,7 @@ public class TriageController {
             throw new Exception(errMsg);
         }
         log.info(triageupdateDto.toString());
-        Triage triage = this.triageService.findById(triageupdateDto.getId()).get();
+        Triage triage = this.triageService.findById(triageupdateDto.getId());
         log.info("**** triage caricato" + triage.toString());
         if(triage == null){
             String errMsg = String.format("Triage con id: %s non esiste", triage.getId());
@@ -158,7 +161,7 @@ public class TriageController {
     @DeleteMapping(value = "/delete/id/{id}", produces = "application/json")
     public ResponseEntity<?> deletePatient(@PathVariable("id") Long id){
         log.info("********* Delete Patient with id " + id);
-        Triage triage = triageService.findById(id).get();
+        Triage triage = triageService.findById(id);
         if(triage == null){
             String errMsg = String.format("Triage con id: %s non esiste", id);
             log.warning(errMsg);
