@@ -27,7 +27,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/patients")
 @Log
-public class PatientController {
+public class PatientController implements PatientApi{
 
     @Autowired
     private IPatientService patientService;
@@ -35,7 +35,7 @@ public class PatientController {
     @Autowired
     private IPatientDtoService patientDtoService;
 
-    @GetMapping(produces = "application/json")
+
     @SneakyThrows
     public ResponseEntity<List<PatientDto>> getPatients(){
         log.info("*** Ottengo la lista dei pazienti ***");
@@ -48,7 +48,7 @@ public class PatientController {
         return new ResponseEntity<List<PatientDto>>(patients, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/search/id/{id}", produces = "application/json")
+
     @SneakyThrows
     public ResponseEntity<PatientDto> findById(@PathVariable("id") Long id){
         log.info("****** Ottengo il paziente con l\'id : " + id + " *******");
@@ -62,7 +62,7 @@ public class PatientController {
         return new ResponseEntity<PatientDto>(patient, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/search/cf/{cf}", produces = "application/json")
+
     @SneakyThrows
     public ResponseEntity<PatientDto> findById(@PathVariable("cf") String cf){
         log.info("****** Ottengo il paziente con l\'id : " + cf + " *******");
@@ -77,7 +77,6 @@ public class PatientController {
     }
 
     @SneakyThrows
-    @PostMapping(value = "/new")
     public ResponseEntity<String> createPatient(@Valid @RequestBody Patient patient , BindingResult bindingResult){
         log.info("******* New Patient " + patient.getCf());
         if(bindingResult.hasErrors()){
@@ -91,7 +90,6 @@ public class PatientController {
     }
 
     @SneakyThrows
-    @RequestMapping(value = "/update", method = RequestMethod.PUT)
     public ResponseEntity<String> updatePatient(@Valid @RequestBody Patient patient, BindingResult bindingResult){
         log.info("******* Update Patient " +patient.getCf());
         if(bindingResult.hasErrors()){
@@ -110,7 +108,6 @@ public class PatientController {
     }
 
     @SneakyThrows
-    @DeleteMapping(value = "/delete/id/{id}", produces = "application/json")
     public ResponseEntity<?> deletePatient(@PathVariable("id") Long id){
         log.info("********* Delete Patient with id " + id);
         Patient patient = patientService.findById(id);
@@ -132,7 +129,6 @@ public class PatientController {
 
     //get list of patients from doctor_id
     @SneakyThrows
-    @GetMapping(value = "/assigned/doctor/id/{id}", produces = "application/json")
     public ResponseEntity<List<PatientDto>> getPatientsAssignedToDoctorId(@PathVariable("id") Long id){
         log.info("*** Ottengo la lista dei pazienti assegnati al doctor id "+ id+ "***");
         List<PatientDto> patients = patientDtoService.getPatientAssignedToDoctor_Id(id);
@@ -144,8 +140,6 @@ public class PatientController {
         patients.forEach(System.out::println);
         return new ResponseEntity<List<PatientDto>>(patients, HttpStatus.OK);
     }
-
-
-
+    
 
 }

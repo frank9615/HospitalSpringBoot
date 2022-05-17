@@ -1,7 +1,6 @@
 package com.example.HospitalSpringBoot.controllers;
 
 
-import com.example.HospitalSpringBoot.dtos.PatientDto;
 import com.example.HospitalSpringBoot.dtos.TriageDto;
 import com.example.HospitalSpringBoot.dtos.TriageUpdateDto;
 import com.example.HospitalSpringBoot.entities.*;
@@ -9,21 +8,18 @@ import com.example.HospitalSpringBoot.servicedto.ITriageDtoService;
 import com.example.HospitalSpringBoot.services.IPatientService;
 import com.example.HospitalSpringBoot.services.ITriageService;
 import com.example.HospitalSpringBoot.services.IUserService;
-import com.example.HospitalSpringBoot.services.impl.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.Doc;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
@@ -31,7 +27,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/triages")
 @Log
-public class TriageController {
+public class TriageController implements TriageApi {
 
     @Autowired
     private ITriageService triageService;

@@ -10,6 +10,12 @@ import com.example.HospitalSpringBoot.servicedto.IUserDtoService;
 import com.example.HospitalSpringBoot.services.IUserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +30,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 import java.util.List;
-import java.util.Locale;
 
 
 @RestController
 @RequestMapping("api/users")
 @Log
-public class UserController {
+public class UserController implements UserApi{
 
     @Autowired
     IUserService userService;
@@ -39,7 +44,6 @@ public class UserController {
     IUserDtoService userDtoService;
 
 
-    @PostMapping(value = "/filter/{pagenum}/{el}", produces = "application/json")
     @SneakyThrows
     public  ResponseEntity<Page<UserDto>> specification(
             @RequestBody SearchCriteria searchCriteria,
@@ -56,7 +60,7 @@ public class UserController {
         return new ResponseEntity<Page<UserDto>>(users, HttpStatus.OK);
     }
 
-    @GetMapping(produces = "application/json")
+
     @SneakyThrows
     public ResponseEntity<List<UserDto>> getUsers(){
         log.info("*** Ottengo la lista degli utenti ***");
@@ -69,7 +73,6 @@ public class UserController {
         return new ResponseEntity<List<UserDto>>(users, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/search/id/{id}", produces = "application/json")
     @SneakyThrows
     public ResponseEntity<UserDto> findById(@PathVariable("id") Long id){
         log.info("****** Ottengo Utente con l\'id : " + id + " *******");
@@ -83,7 +86,6 @@ public class UserController {
         return new ResponseEntity<UserDto>(userdto, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/list/role/{role}" , produces = "application/json")
     @SneakyThrows
     public ResponseEntity<List<UserDto>> getUsersbyRole(@PathVariable("role") String role){
         log.info("*** Ottengo la lista degli utenti con ruolo "+ role + " ****");
@@ -99,7 +101,6 @@ public class UserController {
     }
     //add user
     @SneakyThrows
-    @PostMapping(value = "/new")
     public ResponseEntity<String> createUser(@Valid @RequestBody User user , BindingResult bindingResult){
         log.info("******* New User " + user.getUsername());
         if(bindingResult.hasErrors()){
@@ -115,7 +116,6 @@ public class UserController {
     }
 
     @SneakyThrows
-    @RequestMapping(value = "/update", method = RequestMethod.PUT)
     public ResponseEntity<String> updateUser(@Valid @RequestBody User user, BindingResult bindingResult){
         log.info("******* Update User " +user.getUsername());
         if(bindingResult.hasErrors()){
@@ -137,7 +137,6 @@ public class UserController {
     }
 
     @SneakyThrows
-    @DeleteMapping(value = "/delete/id/{id}", produces = "application/json")
     public ResponseEntity<?> deleteUser(@PathVariable("id") Long id){
         log.info("********* Delete Utente with id " + id);
         User user = this.userService.getById(id);
