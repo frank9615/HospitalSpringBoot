@@ -140,6 +140,6 @@ public class PatientController implements PatientApi{
         patients.forEach(System.out::println);
         return new ResponseEntity<List<PatientDto>>(patients, HttpStatus.OK);
     }
-    
+
 
 }

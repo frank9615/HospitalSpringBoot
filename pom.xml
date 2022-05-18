@@ -79,6 +79,18 @@
 			<version>1.6.6</version>
 		</dependency>
 
+		<!-- For test only -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.4.194</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
